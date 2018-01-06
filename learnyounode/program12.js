@@ -1,35 +1,35 @@
-const http = require('http')
 const url = require('url')
+const http = require('http')
 
-function parsetime (time) {
-  return {
-    hour: time.getHours(),
-    minute: time.getMinutes(),
-    second: time.getSeconds()
+var server = http.createServer(function(req, res) {
+  var result;
+  res.writeHead(200, {'Content-Type': 'application/json'});
+  if (req.method == 'GET') {
+    var str = url.parse(req.url, true);
+    var date = new Date(str.query.iso)
+    var unixTime = date.getTime();
+
+    if (/^\/api\/parsetime/.test(req.url) == "/api/parsetime") {
+
+      var hour = date.getHours();
+      var min = date.getMinutes();
+      var second = date.getSeconds();
+
+      var obj = {
+        hour: hour,
+        minute: minute,
+        second: second
+      }
+
+      result = JSON.stringify(obj);
+    } else {
+      var obj = {
+        unixtime: unixTime
+      }
+      result = JSON.parse(obj);
+    }
   }
-}
-
-function unixtime (time) {
-  return { unixtime: time.getTime() }
-}
-
-const server = http.createServer(function (req, res) {
-  const parsedUrl = url.parse(req.url, true)
-  const time = new Date(parsedUrl.query.iso)
-  let result
-
-  if (/^\/api\/parsetime/.test(req.url)) {
-    result = parsetime(time)
-  } else if (/^\/api\/unixtime/.test(req.url)) {
-    result = unixtime(time)
-  }
-
-  if (result) {
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify(result))
-  } else {
-    res.writeHead(404)
-    res.end()
-  }
+  res.writeHead(200, {'Content-Type': 'application/json'})
+  res.end(JSON.stringify(result));
 })
-server.listen(Number(process.argv[2]))
+server.listen(8080)
