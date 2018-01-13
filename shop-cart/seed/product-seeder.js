@@ -1,3 +1,4 @@
+var mongoose = require('mongoose')
 var Product = require('../models/product');
 mongoose.connect('mongodb://hemant:12345@ds247327.mlab.com:47327/orion', { useMongoClient: true });
 
@@ -41,5 +42,5 @@ for(var i=0;i< products.length;i++){
 
 
 function exit() {
-  mongoose.disconnet();
+  mongoose.connection.close();
 }

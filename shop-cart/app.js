@@ -6,13 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressHbs = require('express-handlebars');
 var mongoose = require('mongoose');
-
+var session = require('express-session');
 var index = require('./routes/index');
+// var passport = require('passport');
+// var flash = require('connect-flash');
 
 
 var app = express();
 
-mongoose.connect('mongodb://hemant:12345@ds247327.mlab.com:47327/orion', { useMongoClient: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));4
@@ -25,8 +26,12 @@ app.set('view engine', '.hbs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(cookieParser());
+// app.use(session({secret: 'mysecret', resave: false, saveUninitialized : false }));
+// app.use(flash());
+// app.use(passport.initialize());
+// app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', index);
 
